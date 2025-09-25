@@ -15,32 +15,33 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
+        // Start the program by creating an instance and running it
         new Main().run();
     }
 
-    private Scanner scanner = new Scanner(System.in);
-    private ArrayList<Student> students = new ArrayList<>();
+    private final Scanner scanner = new Scanner(System.in);
+    private final ArrayList<Student> students = new ArrayList<>();
 
-    //in run loop (while -> menu loop).
+    // Main loop that shows the menu and keeps running until user exits
     public void run() {
         System.out.println("Welcome to Gradebook & Utilities App");
         while (true) {
             printMainMenu();
             int choice = readInt("Enter menu choice: ");
             switch (choice) {
-                case 1:
+                case 1:     // add new students
                     addStudentMenu();
                     break;
-                case 2:
+                case 2:     // input grades for a student
                     enterGradesMenu();
                     break;
-                case 3:
+                case 3:     // display all students
                     showAllStudents();
                     break;
-                case 4:
+                case 4:     // open extra utilities/demos
                     utilitiesMenu();
                     break;
-                case 5:
+                case 5:     //exit program
                     System.out.println("Exiting. Goodbye!");
                     scanner.close();
                     return;
@@ -49,7 +50,7 @@ public class Main {
             }
         }
     }
-
+    // Shows the available main menu options
     private void printMainMenu() {
         System.out.println("\n--- MAIN MENU ---");
         System.out.println("1) Add student");
@@ -61,28 +62,31 @@ public class Main {
 
 
 
-    //Add student: uses do-while to allow adding multiple students.
+    // Menu for adding one or multiple students
     private void addStudentMenu() {
         do {
-            String name = readNonEmptyString("Enter student name: ");
+            String name = readNonEmptyString();
             int id = readInt("Enter student ID (numeric): ");
+            // Prevent duplicates by checking if this ID is already in use
             if (findStudentById(id) != null) {
                 System.out.println("A student with that ID already exists. Try again.");
                 continue; // skip adding, loop again
             }
+            // Create a new student and add them to the list
             Student s = new Student(name, id);
             students.add(s);
             System.out.println("Added: " + s);
-        } while (readYesNo("Add another student? (y/n): "));
+        } while (readYesNo());
     }
 
-    //Enter 5 grades for a selected student (for loop handles 5 entries).
+    // Allows the user to pick a student and enter 5 grades for them
     private void enterGradesMenu() {
         if (students.isEmpty()) {
             System.out.println("No students available. Add a student first.");
             return;
         }
 
+        // Show students in short form so user can choose
         printStudentListBrief();
         int id = readInt("Enter the student ID to enter grades for: ");
         Student s = findStudentById(id);
@@ -91,32 +95,32 @@ public class Main {
             return;
         }
         System.out.println("Entering 5 grades for: " + s.getName());
+        // Force exactly 5 grades
         for (int i = 0; i < 5; i++) {
             double g = readDouble(String.format("Grade %d (0-100): ", i + 1));
             try {
                 s.setGrade(i, g);
             } catch (IllegalArgumentException e) {
                 System.out.println("Invalid grade/index: " + e.getMessage());
-                i--; // repeat this index
+                i--; // retry this slot if input was invalid
             }
         }
         System.out.println("Updated student: " + s);
     }
 
 
-    //Show all students (for-each demo)
+    // Prints details of every student currently stored
     private void showAllStudents() {
         if (students.isEmpty()) {
             System.out.println("No students to show.");
             return;
         }
         System.out.println("\n--- All Students ---");
-        // for-each loop used here to print student info
         for (Student s : students) {
             System.out.println(s.toString());
         }
     }
-
+    // Show only ID and name (used in grade entry selection)
     private void printStudentListBrief() {
         System.out.println("\nStudents (ID - Name):");
         for (Student s : students) {
@@ -124,7 +128,7 @@ public class Main {
         }
     }
 
-    //Utilities submenu with its own switch.
+    // Submenu with fun demos like operators, type casting, recursion
     private void utilitiesMenu() {
         while (true) {
             System.out.println("\n--- UTILITIES ---");
@@ -148,32 +152,35 @@ public class Main {
                     forEachNamesDemo();
                     break;
                 case 5:
-                    return;
+                    return;   // go back to main menu
                 default:
                     System.out.println("Invalid utility choice.");
             }
         }
     }
 
+    // Simple arithmetic example showing operator precedence
     private void operatorDemo() {
         int a = 2, b = 3, c = 4;
-        int result1 = a + b * c;         // 2 + (3*4) = 14
-        int result2 = (a + b) * c;       // (2+3)*4 = 20
+        int result1 = a + b * c;         // 2 + (3*4) = 14  // * happens before +
+        int result2 = (a + b) * c;       // (2+3)*4 = 20    // parentheses change order
         System.out.println("Operator demo:");
         System.out.printf("2 + 3 * 4 = %d  (because * has higher precedence than +)\n", result1);
         System.out.printf("(2 + 3) * 4 = %d  (parentheses change evaluation order)\n", result2);
     }
 
+    // Example of widening and narrowing type casts
     private void typeCastingDemo() {
         int i = 7;
-        double widened = i; // widening (safe)
+        double widened = i;              // safe conversion
         double d = 7.9;
-        int narrowed = (int) d; // narrowing/truncation
+        int narrowed = (int) d;         // fractional part lost
         System.out.println("Type casting demo:");
         System.out.println("int 7 widened to double => " + widened);
         System.out.println("double 7.9 narrowed to int => " + narrowed + " (fraction truncated)");
     }
 
+    // Countdown example using recursion
     private void recursionDemo() {
         int n = readInt("Enter a non-negative integer to countdown from: ");
         if (n < 0) {
@@ -185,7 +192,7 @@ public class Main {
         System.out.println("Done!");
     }
 
-    //Recursive countdown method. Guard against negative by caller.
+    // Recursive helper for countdown
     private void countdown(int n) {
         System.out.println(n);
         if (n == 0) return;
@@ -203,7 +210,7 @@ public class Main {
     // Helper / Input methods
     // -----------------------
 
-    //Read integer safely (handles non-integer input).
+    // Safely reads an int, keeps asking until valid
     private int readInt(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -216,7 +223,7 @@ public class Main {
         }
     }
 
-    //Read double safely (handles non-double input).
+    // Safely reads a double, keeps asking until valid
     private double readDouble(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -229,20 +236,20 @@ public class Main {
         }
     }
 
-    //Read non-empty string.
-    private String readNonEmptyString(String prompt) {
+    // Ensures input is not empty
+    private String readNonEmptyString() {
         while (true) {
-            System.out.print(prompt);
+            System.out.print("Enter student name: ");
             String line = scanner.nextLine().trim();
             if (!line.isEmpty()) return line;
             System.out.println("Input cannot be empty.");
         }
     }
 
-    //Read yes/no, returns true for 'y' or 'Y'.
-    private boolean readYesNo(String prompt) {
+    // Reads yes/no input and returns boolean
+    private boolean readYesNo() {
         while (true) {
-            System.out.print(prompt);
+            System.out.print("Add another student? (y/n): ");
             String line = scanner.nextLine().trim().toLowerCase();
             if (line.equals("y") || line.equals("yes")) return true;
             if (line.equals("n") || line.equals("no")) return false;
@@ -250,7 +257,7 @@ public class Main {
         }
     }
 
-    //Find a student by numeric id.
+    // Finds a student by their unique ID
     private Student findStudentById(int id) {
         for (Student s : students) {
             if (s.getId() == id) return s;

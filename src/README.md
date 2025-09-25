@@ -1,11 +1,8 @@
 F2025 MAD204-01 Java Development for MAD
 
 MAD204-01 LAB 1
-
 Name: Darshilkumar Karkar
-
 Student ID: A0203357
-
 Date of Submission: 21/09/2025
 
 LAB 1
@@ -116,5 +113,4 @@ Marking Rubric (25 points)
  Loop coverage (for/while/do-while/for-each) (4)
  Recursion utility (2).
  Documentation (3)
-
  Submission (2)
