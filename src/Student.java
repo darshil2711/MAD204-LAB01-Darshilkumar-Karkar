@@ -3,24 +3,24 @@
 //Name: Darshilkumar Karkar
 //Student ID: A00203357
 //Date of Submission: 21/09/2025
-//A simple Student model for the Gradebook & Utilities app.
-//Fields: name, id, grades[5]
-//Methods:
-//  - setGrade(int index, double value)
-//  - average()
-//  - letterGrade()
-//  - toString()
-// Note: grades are 0-100. average() returns a double average across the 5 grades.
+//
+//This class represents a single student in the Gradebook & Utilities app.
+// Each student has a name, an ID number, and 5 grades.
+// The class can calculate the student's average, assign a letter grade,
+// and print out a summary of their info in a nice format.
 
-//Test change
+
 public class Student {
+    //This field seems incorrect: `getName` should probably be a method, not a variable.
+    // Leaving it here for now, but in real cleanup we’d remove or fix it.
     public String getName;
-    private String name;
-    private int id;
-    private double[] grades;
+    // Core information about a student
+    private String name;              // Student’s name
+    private int id;                   // Unique student ID
+    private double[] grades;          // Array of 5 grades (default 0.0)
 
-
-    //Create a student with a name and id. Grades default to 0.0.
+    // Constructor: when creating a new student, we pass in their name and ID.
+    // Grades array is initialized with 5 slots, all starting at 0.
     public Student(String name, int id) {
         this.name = name;
         this.id = id;
@@ -30,8 +30,8 @@ public class Student {
         }
     }
 
-
-    //Set a grade at index (0..4).
+    // Assigns a grade to a specific position in the grades array (0–4).
+    // We validate both the index (must be within array) and the grade value (0–100).
     public void setGrade(int index, double value) {
         if (index < 0 || index >= grades.length) {
             throw new IllegalArgumentException("Grade index must be between 0 and 4.");
@@ -42,8 +42,9 @@ public class Student {
         grades[index] = value;
     }
 
-    //Compute average of the 5 grades.
-    public double average() {
+    // Calculates the average across the 5 grades.
+    // Even if some grades are still 0, they’re factored into the average.
+        public double average() {
         double sum = 0.0;
         for (double g : grades) {
             sum += g;
@@ -51,14 +52,9 @@ public class Student {
         return sum / grades.length;
     }
 
-
-    //Return letter grade based on average.
-    //Ranges:
-    //- A: avg >= 90
-    //- B: 80 <= avg < 90
-    //- C: 70 <= avg < 80
-    //- D: 60 <= avg < 70
-    //- F: avg < 60
+    // Converts the numeric average into a letter grade.
+    // Uses standard grading scale:
+    // A (90+), B (80–89), C (70–79), D (60–69), F (<60).
     public char letterGrade() {
         double avg = average();
         if (avg >= 90.0) return 'A';
@@ -68,13 +64,14 @@ public class Student {
         else return 'F';
     }
 
-    //String representation required: "ID: 101, Name: Sam, Avg: 86.4 (B)"
+    // Nicely formatted summary of the student’s info.
+    // Example: "ID: 101, Name: Sam, Avg: 86.4 (B)"
     @Override
     public String toString() {
         return String.format("ID: %d, Name: %s, Avg: %.1f (%c)", id, name, average(), letterGrade());
     }
 
-    // Simple getters (used by Main)
+    // Getter methods so other classes (like Main) can safely access fields.
     public String getName() {
         return name;
     }
@@ -83,6 +80,8 @@ public class Student {
         return id;
     }
 
+    // Returns the full grades array if needed.
+    // Note: exposes internal array directly (could be risky in real-world apps).
     public double[] getGrades() {
         return grades;
     }
