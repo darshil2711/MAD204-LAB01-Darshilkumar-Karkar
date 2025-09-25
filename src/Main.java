@@ -179,6 +179,7 @@ public class Main {
         System.out.println("int 7 widened to double => " + widened);
         System.out.println("double 7.9 narrowed to int => " + narrowed + " (fraction truncated)");
     }
+
     // Countdown example using recursion
     private void recursionDemo() {
         int n = readInt("Enter a non-negative integer to countdown from: ");
