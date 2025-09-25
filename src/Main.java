@@ -19,8 +19,8 @@ public class Main {
         new Main().run();
     }
 
-    private Scanner scanner = new Scanner(System.in);
-    private ArrayList<Student> students = new ArrayList<>();
+    private final Scanner scanner = new Scanner(System.in);
+    private final ArrayList<Student> students = new ArrayList<>();
 
     // Main loop that shows the menu and keeps running until user exits
     public void run() {
@@ -65,7 +65,7 @@ public class Main {
     // Menu for adding one or multiple students
     private void addStudentMenu() {
         do {
-            String name = readNonEmptyString("Enter student name: ");
+            String name = readNonEmptyString();
             int id = readInt("Enter student ID (numeric): ");
             // Prevent duplicates by checking if this ID is already in use
             if (findStudentById(id) != null) {
@@ -76,7 +76,7 @@ public class Main {
             Student s = new Student(name, id);
             students.add(s);
             System.out.println("Added: " + s);
-        } while (readYesNo("Add another student? (y/n): "));
+        } while (readYesNo());
     }
 
     // Allows the user to pick a student and enter 5 grades for them
@@ -237,9 +237,9 @@ public class Main {
     }
 
     // Ensures input is not empty
-    private String readNonEmptyString(String prompt) {
+    private String readNonEmptyString() {
         while (true) {
-            System.out.print(prompt);
+            System.out.print("Enter student name: ");
             String line = scanner.nextLine().trim();
             if (!line.isEmpty()) return line;
             System.out.println("Input cannot be empty.");
@@ -247,9 +247,9 @@ public class Main {
     }
 
     // Reads yes/no input and returns boolean
-    private boolean readYesNo(String prompt) {
+    private boolean readYesNo() {
         while (true) {
-            System.out.print(prompt);
+            System.out.print("Add another student? (y/n): ");
             String line = scanner.nextLine().trim().toLowerCase();
             if (line.equals("y") || line.equals("yes")) return true;
             if (line.equals("n") || line.equals("no")) return false;
